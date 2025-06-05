@@ -38,6 +38,6 @@ Este explorador consume datos desde la **API REST Countries** para mostrar infor
 - Vitest
 - Vue Test Utils
 
-## Creado por Erica Graciela Bordon Irala
+## Creado por Erica B.
 Facultad de Ingenieria - Universidad del Norte
 Junio 2025
