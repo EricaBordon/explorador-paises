@@ -9,7 +9,7 @@ Este explorador consume datos desde la **API REST Countries** para mostrar infor
 ## 🔧 Instrucciones de Instalación y Uso
 
 1. Clona el repositorio:
- git clone https://github.com/usuario/explorador-paises.git
+ git clone https://github.com/EricaBordon/explorador-paises
 2. Instala las dependencias:
  npm install
 3. Inicia el proyecto en modo desarrollo:
