@@ -1,4 +1,3 @@
-<!-- src/App.vue -->
 <template>
   <div :class="{ dark: modoOscuro }">
     <div class="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-4">
@@ -12,7 +11,7 @@
         <div class="flex items-center space-x-2">
           <!-- Botón modo oscuro/claro -->
           <button
-            @click="modoOscuro = !modoOscuro"
+            @click="toggleModoOscuro"
             class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded"
           >
             {{ modoOscuro ? '☀️' : '🌙' }}
@@ -29,7 +28,7 @@
       </div>
 
       <!-- Componente ListaPaises (grilla + estadísticas + detalles) -->
-      <ListaPaises ref="listaComponent" />
+      <ListaPaises ref="listaComponent" :modoOscuro="modoOscuro" />
     </div>
   </div>
 </template>
@@ -45,12 +44,15 @@ export default defineComponent({
   },
   data() {
     return {
-      modoOscuro: false
+      modoOscuro: JSON.parse(localStorage.getItem('modoOscuro')) || false
     }
   },
   methods: {
+    toggleModoOscuro() {
+      this.modoOscuro = !this.modoOscuro
+      localStorage.setItem('modoOscuro', JSON.stringify(this.modoOscuro))
+    },
     exportarDesdeLista() {
-      // Llama al método exportarCSV() que está definido dentro de ListaPaises.vue
       if (
         this.$refs.listaComponent &&
         typeof this.$refs.listaComponent.exportarCSV === 'function'
@@ -61,3 +63,4 @@ export default defineComponent({
   }
 })
 </script>
+
