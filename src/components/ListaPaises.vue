@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div :class="{ dark: modoOscuro }" class="p-4">
     <h2 class="text-2xl font-bold text-blue-700 mb-4 dark:text-blue-300">
       Países del mundo 🌎
     </h2>
@@ -55,7 +55,7 @@
         >
           <DetallesPais
             :pais="paisSeleccionado"
-            @cerrar="paisSeleccionado = null"
+            @cerrar="cerrarDetalles"
           />
         </div>
       </div>
@@ -65,9 +65,7 @@
         <h3 class="text-xl font-bold mb-4 text-gray-700 dark:text-gray-200 text-center">
           Estadísticas de Países por Región
         </h3>
-        <!-- Contenedor centrado y con ancho máximo -->
         <div class="mx-auto max-w-xl">
-          <!-- Ajustamos la altura a h-48 (12rem) en lugar de h-64 -->
           <div class="chart-container relative h-48">
             <Estadisticas :paises="paises" />
           </div>
@@ -81,14 +79,12 @@
 @import 'ag-grid-community/styles/ag-grid.css';
 @import 'ag-grid-community/styles/ag-theme-alpine.css';
 
-/* Transición suave para cambio de ancho */
 .transition-width {
   transition-property: width;
 }
 
-/* Ajustamos la altura del contenedor del gráfico */
 .chart-container {
-  height: 12rem; /* h-48 = 12rem */
+  height: 12rem;
 }
 </style>
 
@@ -101,7 +97,6 @@ import FiltroRegion from './FiltroRegion.vue'
 import DetallesPais from './DetallesPais.vue'
 import Estadisticas from './Estadisticas.vue'
 
-// Registramos todos los módulos community de AG Grid (v30+)
 ModuleRegistry.registerModules([AllCommunityModules])
 
 export default defineComponent({
@@ -118,12 +113,12 @@ export default defineComponent({
       paises: [],
       loading: true,
       error: null,
-      busqueda: '',
-      regionSeleccionada: '',
-      paisSeleccionado: null,
+      busqueda: localStorage.getItem('busqueda') || '',
+      regionSeleccionada: localStorage.getItem('regionSeleccionada') || '',
+      paisSeleccionado: JSON.parse(localStorage.getItem('paisSeleccionado')) || null,
+      modoOscuro: JSON.parse(localStorage.getItem('modoOscuro')) || false,
       gridApi: null,
       gridColumnApi: null,
-
       columnDefs: [
         {
           headerName: 'Nombre',
@@ -147,8 +142,7 @@ export default defineComponent({
                 src="${params.value}"
                 alt="Bandera de ${params.data.name.common}"
                 style="width: 30px; height: 20px; object-fit: cover"
-              />
-            `
+              />`
           }
         }
       ],
@@ -172,6 +166,20 @@ export default defineComponent({
       })
     }
   },
+  watch: {
+    busqueda(val) {
+      localStorage.setItem('busqueda', val)
+    },
+    regionSeleccionada(val) {
+      localStorage.setItem('regionSeleccionada', val)
+    },
+    paisSeleccionado(val) {
+      localStorage.setItem('paisSeleccionado', JSON.stringify(val))
+    },
+    modoOscuro(val) {
+      localStorage.setItem('modoOscuro', JSON.stringify(val))
+    }
+  },
   methods: {
     onGridReady(params) {
       this.gridApi = params.api
@@ -187,6 +195,10 @@ export default defineComponent({
     },
     verDetalles(params) {
       this.paisSeleccionado = params.data
+    },
+    cerrarDetalles() {
+      this.paisSeleccionado = null
+      localStorage.removeItem('paisSeleccionado')
     }
   },
   mounted() {
@@ -211,3 +223,4 @@ export default defineComponent({
   }
 })
 </script>
+
