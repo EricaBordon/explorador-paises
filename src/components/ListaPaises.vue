@@ -189,7 +189,8 @@ export default defineComponent({
       if (this.gridApi) {
         this.gridApi.exportDataAsCsv({
           fileName: 'paises_filtrados.csv',
-          allColumns: false
+          allColumns: false,
+          columnSeparator: ';'
         })
       }
     },
